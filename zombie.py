@@ -64,6 +64,9 @@ class Zombie:
 
     def handle_collision(self, group, other):
         if group == 'fire_ball:zombie':
+            if 58 <= other.get_ypos() <= 62:
+                print('땅에 있는 볼 맞아서 효과 X')
+                return
             print('fire_ball 맞음')
             self.lifeCnt -= 1
 
