@@ -29,7 +29,7 @@ class Zombie:
                 Zombie.images[name] = [load_image("./zombie/"+ name + " (%d)" % i + ".png") for i in range(1, 11)]
 
     def __init__(self):
-        self.x, self.y = random.randint(1600-800, 1600), 150
+        self.x, self.y = random.randint(1600-800, 1600), random.randint(120, 150)
         self.load_images()
         self.frame = random.randint(0, 9)
         self.dir = random.choice([-1,1])
@@ -37,7 +37,9 @@ class Zombie:
 
 
     def get_bb(self):
-        return self.x - 100, self.y - 100, self.x + 100, self.y + 100
+        if self.lifeCnt == 1:
+            return self.x - 50*self.lifeCnt, self.y - 50*self.lifeCnt - 50, self.x + 50*self.lifeCnt, self.y
+        return self.x - 50*self.lifeCnt, self.y - 50*self.lifeCnt, self.x + 50*self.lifeCnt, self.y + 50*self.lifeCnt
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
@@ -52,9 +54,9 @@ class Zombie:
 
     def draw(self):
         if self.dir < 0:
-            Zombie.images['Walk'][int(self.frame)].composite_draw(0, 'h', self.x, self.y, self.lifeCnt * 100, self.lifeCnt * 100)
+            Zombie.images['Walk'][int(self.frame)].composite_draw(0, 'h', self.x, self.y- 50*(2-self.lifeCnt), self.lifeCnt * 100, self.lifeCnt * 100)
         else:
-            Zombie.images['Walk'][int(self.frame)].draw(self.x, self.y, self.lifeCnt * 100, self.lifeCnt * 100)
+            Zombie.images['Walk'][int(self.frame)].draw(self.x, self.y- 50*(2-self.lifeCnt), self.lifeCnt * 100, self.lifeCnt * 100)
         draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):
